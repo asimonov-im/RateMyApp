@@ -17,12 +17,14 @@
 #ifndef _RATEMYAPP_H_
 #define _RATEMYAPP_H_
 
+#include <sys/platform.h>
+
 __BEGIN_DECLS
 
 /*
  Place your BlackBerry App Store id here.
  */
-#define RMA_APP_ID 382015046
+#define RMA_APPWORLD_ID "appworld://content/95522"
 
 /*
  Your app's name.
@@ -36,11 +38,6 @@ __BEGIN_DECLS
 #define RMA_MESSAGE	"If you enjoy playing Frogatto, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!"
 
 /*
- This is the title of the message alert that users will see.
- */
-#define RMA_MESSAGE_TITLE "Rate Frogatto"
-
-/*
  The text of the button that rejects reviewing the app.
  */
 #define RMA_CANCEL_BUTTON "No, Thanks"
@@ -48,18 +45,18 @@ __BEGIN_DECLS
 /*
  Text of button that will send user to app review page.
  */
-#define RMA_RATE_BUTTON	"Rate Frogatto"
+#define RMA_RATE_BUTTON	"Rate now"
 
 /*
  Text for button to remind the user to review later.
  */
-#define RMA_RATE_LATER "Remind me later"
+#define RMA_RATE_LATER "Rate later"
 
 /*
  Users will need to have the same version of your app installed for this many
  days before they will be prompted to rate it.
  */
-#define RMA_DAYS_UNTIL_PROMPT		15		// double
+#define RMA_DAYS_UNTIL_PROMPT		0		// double
 
 /*
  An example of a 'use' would be if the user launched the app. Bringing the app
@@ -71,7 +68,7 @@ __BEGIN_DECLS
  Users need to 'use' the same version of the app this many times before
  before they will be prompted to rate it.
  */
-#define RMA_USES_UNTIL_PROMPT		10		// integer
+#define RMA_USES_UNTIL_PROMPT		0		// integer
 
 /*
  A significant event can be anything you want to be in your app. In a
@@ -97,27 +94,27 @@ __BEGIN_DECLS
  'YES' will show the Appirater alert everytime. Useful for testing how your message
  looks and making sure the link to your app's review page works.
  */
-#define RMA_DEBUG				0
+#define RMA_DEBUG 1
 
 /**
  * Start the RateMyApp service.
  */
-void rma_start(void);
+void rma_start();
+
+/**
+ * Stop the RateMyApp service.
+ */
+void rma_stop();
 
 /**
  * Indicate that the app has been launched
  */
-void rma_app_launched(bool suppress);
-
-/**
- * Indicate that the app was brought to the foreground
- */
-void rma_app_entered_foreground(bool suppress);
+void rma_app_launched(bool show);
 
 /**
  * Indicate that the user performed a significant event
  */
-void rma_app_significant_event(bool suppress);
+void rma_app_significant_event(bool show);
 
 __END_DECLS
 

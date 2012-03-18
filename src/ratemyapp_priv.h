@@ -17,21 +17,47 @@
 #ifndef RATEMYAPP_PRIV_H_
 #define RATEMYAPP_PRIV_H_
 
+#include <string>
+#include <bps/bps.h>
+
+enum RMAError {
+	RMA_NO_ERROR = 0,
+	RMA_BPS_FAILURE = 1,
+	RMA_FILE_ERROR = 2
+};
+
 class RateMyApp
 {
 public:
-	RateMyApp *getInstance();
-	void start();
-	void appLaunched(bool suppress);
-	void appEnteredForeground(bool suppress);
-	void appSignificantEvent(bool suppress);
+	RateMyApp();
 	~RateMyApp();
+	void appLaunched(bool show);
+	void appSignificantEvent(bool show);
 
 private:
-	RateMyApp();
+	void initStatsFile();
+	bool writeStats();
+	bool readStats();
+	void showReminder();
+	bool conditionsMet();
+	bool showAlert();
+	void handleResponse(bps_event_t *event);
 
-	static RateMyApp *instance;
-	char m_name[];
+	static RateMyApp * s_rmaInstance;
+	std::string m_statPath;
+	std::string m_appWorldURI;
+	std::string m_message;
+	std::string m_cancelButton;
+	std::string m_rateButton;
+	std::string m_rateLater;
+
+	RMAError m_errCode;
+	bool m_rated;
+	bool m_postponed;
+	int m_launchTime;
+	int m_postponeTime;
+	int m_launchCount;
+	int m_sigEventCount;
 };
 
 #endif /* RATEMYAPP_PRIV_H_ */
