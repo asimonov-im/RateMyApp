@@ -19,22 +19,34 @@
 
 #include <string>
 #include <bps/bps.h>
-
-enum RMAError {
-	RMA_NO_ERROR = 0,
-	RMA_BPS_FAILURE = 1,
-	RMA_FILE_ERROR = 2
-};
+#include "bps/dialog.h"
 
 class RateMyApp
 {
 public:
-	RateMyApp();
+	static RateMyApp *getInstance();
+	static void createInstance();
+	static void destroyInstance();
+	static RMAError getError();
+
 	~RateMyApp();
-	void appLaunched(bool show);
-	void appSignificantEvent(bool show);
+	void appLaunched(bool enableReminder);
+	void appSignificantEvent(bool enableReminder);
+
+	bool isRated();
+	void setRated();
+	bool isPostponed();
+	void setPostponed();
+	int launchCount();
+	int sigEventCount();
+	int firstLaunchTime();
+	int postponedTime();
+	bool networkAvailable();
+	void openAppWorld(const char *id);
+
 
 private:
+	RateMyApp();
 	void initStatsFile();
 	bool writeStats();
 	bool readStats();
@@ -43,15 +55,11 @@ private:
 	bool showAlert();
 	void handleResponse(bps_event_t *event);
 
-	static RateMyApp * s_rmaInstance;
-	std::string m_statPath;
-	std::string m_appWorldURI;
-	std::string m_message;
-	std::string m_cancelButton;
-	std::string m_rateButton;
-	std::string m_rateLater;
+	static RateMyApp* s_rmaInstance;
+	static RMAError s_errCode;
+	static dialog_instance_t s_alertDialog;
 
-	RMAError m_errCode;
+	std::string m_statPath;
 	bool m_rated;
 	bool m_postponed;
 	int m_launchTime;

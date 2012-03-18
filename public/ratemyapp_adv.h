@@ -17,7 +17,7 @@
 #ifndef _RATEMYAPP_H_
 #define _RATEMYAPP_H_
 
-#ifdef __RMA_ADVANCED_MODE_
+#ifndef __RMA_ADVANCED_MODE_
 #error "To use the advanced version of RateMyApp, include ratemyapp_adv.h and define _RMA_ADVANCED_MODE_. To use the basic version, include ratemyapp.h and undefine _RMA_ADVANCED_MODE_."
 #endif
 
@@ -44,12 +44,12 @@ __BEGIN_DECLS
 /*
  Text of button that will send user to app review page.
  */
-#define RMA_RATE_BUTTON	"Rate Now"
+#define RMA_RATE_BUTTON	"Rate now"
 
 /*
  Text for button to remind the user to review later.
  */
-#define RMA_LATER_BUTTON "Rate Later"
+#define RMA_RATE_LATER "Rate later"
 
 /*
  Users will need to have the same version of your app installed for this many
@@ -97,36 +97,41 @@ __BEGIN_DECLS
 
 enum RMAError {
 	RMA_NO_ERROR = 0,
-	RMA_NOT_RUNNING = 1,
-	RMA_BPS_FAILURE = 2,
-	RMA_FILE_ERROR = 3,
-	RMA_MEMORY_ERROR = 4
+	RMA_BPS_FAILURE = 1,
+	RMA_FILE_ERROR = 2
 };
 
 /**
- * Returns the current error state
- */
-RMAError rma_get_error();
-
-/**
- * Starts the RateMyApp service.
+ * Start the RateMyApp service.
  */
 void rma_start();
 
 /**
- * Stops the RateMyApp service.
+ * Stop the RateMyApp service.
  */
 void rma_stop();
 
 /**
- * Indicates that the app has been launched
+ * Indicate that the app has been launched
  */
+#ifdef _RMA_ADVANCED_MODE_
+void rma_app_launched();
+#else
 void rma_app_launched(bool enableReminder);
+#endif
 
 /**
- * Indicates that the user performed a significant event
+ * Indicate that the user performed a significant event
  */
+#ifdef _RMA_ADVANCED_MODE_
+void rma_app_significant_event();
+#else
 void rma_app_significant_event(bool enableReminder);
+#endif
+
+#ifdef _RMA_ADVANCED_MODE_
+RMAError rma_get_error();
+#endif
 
 __END_DECLS
 
