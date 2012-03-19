@@ -34,13 +34,13 @@ public:
 	void appSignificantEvent(bool enableReminder);
 
 	bool isRated();
-	void setRated();
+	void setRated(bool val);
 	bool isPostponed();
-	void setPostponed();
+	void setPostponed(bool val);
 	int launchCount();
 	int sigEventCount();
-	int firstLaunchTime();
-	int postponedTime();
+	long long firstLaunchTime();
+	long long postponedTime();
 	bool networkAvailable();
 	void openAppWorld(unsigned int id);
 

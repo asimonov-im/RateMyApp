@@ -44,7 +44,7 @@ enum RMAError {
 /**
  * Returns the current error state
  */
-RMAError rma_get_error();
+enum RMAError rma_get_error();
 
 /**
  * Start RateMyApp
@@ -72,9 +72,9 @@ void rma_app_significant_event();
 bool rma_is_rated();
 
 /**
- * Records that the app has reviewed
+ * Sets the rated status to val
  */
-void rma_set_rated();
+void rma_set_rated(bool val);
 
 /**
  * Returns true if the user has postponed the review process
@@ -82,9 +82,9 @@ void rma_set_rated();
 bool rma_is_postponed();
 
 /**
- * Records that the user wanted to postpone the review
+ * Sets the postponed status to val
  */
-void rma_set_postponed();
+void rma_set_postponed(bool val);
 
 /**
  * Returns total number of times the app has been launched

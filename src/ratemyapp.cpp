@@ -44,11 +44,11 @@ const bool dRated = true;
 const bool dPostponed = true;
 const int dLaunchCount = 0;
 const int dSigEventCount = 0;
-const long long dFirstLaunchTime = std::numeric_limits<long long>::max();
+const long long dFirstLaunchTime = std::time(NULL);
 const long long dPostponedTime = std::numeric_limits<long long>::max();
 const bool dNetworkAvailable = false;
 
-EXTERNAL_API RMAError rma_get_error()
+EXTERNAL_API enum RMAError rma_get_error()
 {
 	return RateMyApp::getError();
 }
@@ -102,10 +102,10 @@ EXTERNAL_API bool rma_is_rated()
 	}
 }
 
-EXTERNAL_API void rma_set_rated()
+EXTERNAL_API void rma_set_rated(bool val)
 {
 	if (RateMyApp::getError() == RMA_NO_ERROR) {
-		RateMyApp::getInstance()->setRated();
+		RateMyApp::getInstance()->setRated(val);
 	}
 }
 
@@ -118,10 +118,10 @@ EXTERNAL_API bool rma_is_postponed()
 	}
 }
 
-EXTERNAL_API void rma_set_postponed()
+EXTERNAL_API void rma_set_postponed(bool val)
 {
 	if (RateMyApp::getError() == RMA_NO_ERROR) {
-		RateMyApp::getInstance()->setPostponed();
+		RateMyApp::getInstance()->setPostponed(val);
 	}
 }
 
@@ -218,13 +218,18 @@ void RateMyApp::destroyInstance() {
 	}
 }
 
+RMAError RateMyApp::getError()
+{
+	return s_errCode;
+}
+
 RateMyApp::RateMyApp()
 	: m_rated(false)
 	, m_postponed(false)
-	, m_launchTime(std::time(NULL))
-	, m_postponeTime(0)
-	, m_launchCount(0)
-	, m_sigEventCount(0)
+	, m_launchTime(dFirstLaunchTime)
+	, m_postponeTime(dPostponedTime)
+	, m_launchCount(dLaunchCount)
+	, m_sigEventCount(dSigEventCount)
 {
 	initStatsFile();
 	readStats();
@@ -411,17 +416,56 @@ void RateMyApp::openAppWorld(unsigned int id)
 	}
 }
 
-void RateMyApp::setRated()
+bool RateMyApp::isRated()
 {
-	m_rated = true;
+	return m_rated;
 }
 
-void RateMyApp::setPostponed()
+void RateMyApp::setRated(bool val)
 {
-	m_postponed = true;
-	m_postponeTime = std::time(NULL);
+	m_rated = val;
+	writeStats();
 }
 
+bool RateMyApp::isPostponed()
+{
+	return m_postponed;
+}
+
+void RateMyApp::setPostponed(bool val)
+{
+	m_postponed = val;
+	if (val) {
+		m_postponeTime = std::time(NULL);
+	} else {
+		m_postponeTime = 0;
+	}
+	writeStats();
+}
+
+int RateMyApp::launchCount()
+{
+	return m_launchCount;
+}
+
+int RateMyApp::sigEventCount()
+{
+	return m_sigEventCount;
+}
+
+long long RateMyApp::firstLaunchTime()
+{
+	return m_launchTime;
+}
+
+long long  RateMyApp::postponedTime()
+{
+	if (m_postponed) {
+		return m_postponeTime;
+	} else {
+		return dPostponedTime;
+	}
+}
 
 #ifndef _RMA_ADVANCED_MODE_
 double daysSinceDate(long long date) {
@@ -443,7 +487,6 @@ void RateMyApp::showReminder()
 
 			if (event && bps_event_get_domain(event) == dialog_get_domain()) {
 				handleResponse(event);
-				writeStats();
 				break;
 			}
 		}
@@ -545,15 +588,22 @@ void RateMyApp::handleResponse(bps_event_t *event)
 
 	switch (selectedIndex) {
 	case 0: // rate
+		// Temporarily set app as rated. This is to deal with the case when
+		// RMA is started before anything has been drawn to the screen and thus
+		// may be killed before the user returns from App World
+		setRated(true);
 		openAppWorld(RMA_APPWORLD_ID);
 		if (s_errCode != RMA_NO_ERROR) {
-			break;
+			// If opening App World failed then postpone reminder
+			setPostponed(true);
+			setRated(false);
 		}
+		break;
 	case 2: // cancel
-		setRated();
+		setRated(true);
 		break;
 	case 1: // rate later
-		setPostponed();
+		setPostponed(true);
 	    break;
 	default:
 #if RMA_DEBUG > 0

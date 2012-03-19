@@ -94,7 +94,7 @@ enum RMAError {
 /**
  * Returns the current error state
  */
-RMAError rma_get_error();
+enum RMAError rma_get_error();
 
 /**
  * Starts RateMyApp
