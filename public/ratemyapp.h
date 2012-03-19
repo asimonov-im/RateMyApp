@@ -15,7 +15,7 @@
  */
 
 #ifndef _RATEMYAPP_H_
-#define _RATEMYAPP_H_rm
+#define _RATEMYAPP_H_
 
 #include <sys/platform.h>
 
@@ -24,7 +24,7 @@ __BEGIN_DECLS
 /*
  * The application's BlackBerry App World id
  */
-#define RMA_APPWORLD_ID                  0  // unsigned integer
+#define RMA_APPWORLD_ID                  95522  // unsigned integer
 
 /*
  * The reminder message the user will see once they've passed the day+launches threshold.
@@ -49,13 +49,13 @@ __BEGIN_DECLS
 /*
  * Number of days the app must be installed before the user is prompted for a review.
  */
-#define RMA_DAYS_UNTIL_PROMPT            5.0  // double
+#define RMA_DAYS_UNTIL_PROMPT            0.0  // double
 
 /*
  * Number of times the app must be launched before the review reminder is triggered.
  * To indicate a successful app launch, call rma_app_launched
  */
-#define RMA_USES_UNTIL_PROMPT            5  // integer
+#define RMA_USES_UNTIL_PROMPT            3  // integer
 
 /*
  * A significant event can be anything you want to be in your app, such
@@ -69,7 +69,7 @@ __BEGIN_DECLS
  * Number of days to wait before presenting the review reminder dialogue again
  * after the user postpones reviewing the app.
  */
-#define RMA_TIME_BEFORE_REMINDING		 2.0  // double
+#define RMA_TIME_BEFORE_REMINDING		 0.0  // double
 
 /*
  * Debug level for RateMyApp:
@@ -77,7 +77,7 @@ __BEGIN_DECLS
  *   1 print debug information
  *   2 print debug information and always show reminders
  */
-#define RMA_DEBUG 2
+#define RMA_DEBUG 1
 
 enum RMAError {
 	RMA_NO_ERROR = 0,

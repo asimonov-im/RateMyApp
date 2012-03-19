@@ -465,9 +465,9 @@ void RateMyApp::setPostponed(bool val)
 {
 	m_postponed = val;
 	if (val) {
-		m_postponeTime = dPostponedTime;
+		m_postponeTime = std::time(NULL);
 	} else {
-		m_postponeTime = 0;
+		m_postponeTime = dPostponedTime;
 	}
 	writeStats();
 }
@@ -532,7 +532,7 @@ bool RateMyApp::conditionsMet()
 
 	// Check if app has already been rated
 	if (m_rated) {
-#if RMA_DEBUG > 1
+#if RMA_DEBUG > 0
 		std::cerr << "RMA: App has already been rated" << std::endl;
 #endif
 		return false;
@@ -540,23 +540,23 @@ bool RateMyApp::conditionsMet()
 
 	// Check number of launches
 	if (m_launchCount < RMA_USES_UNTIL_PROMPT) {
-#if RMA_DEBUG > 1
+#if RMA_DEBUG > 0
 		std::cerr << "RMA: Insufficient number of launches (" << m_launchCount << ")" << std::endl;
 #endif
 		return false;
 	}
 
 	// Check days since first launch
-	if (daysSinceDate(m_launchTime) < RMA_USES_UNTIL_PROMPT) {
-#if RMA_DEBUG > 1
-		std::cerr << "RMA: Insufficient times has passed (" << daysSinceDate(m_launchTime) << ")" << std::endl;
+	if (daysSinceDate(m_launchTime) < RMA_DAYS_UNTIL_PROMPT) {
+#if RMA_DEBUG > 0
+		std::cerr << "RMA: Insufficient time has passed (" << daysSinceDate(m_launchTime) << ")" << std::endl;
 #endif
 		return false;
 	}
 
 	// Check number of significant events
 	if (m_sigEventCount < RMA_SIG_EVENTS_UNTIL_PROMPT) {
-#if RMA_DEBUG > 1
+#if RMA_DEBUG > 0
 		std::cerr << "RMA: Insufficient number of significant events (" << m_sigEventCount << ")" << std::endl;
 #endif
 		return false;
@@ -565,7 +565,7 @@ bool RateMyApp::conditionsMet()
 	// Check if reminder was postponed
 	if (m_postponed) {
 		if (daysSinceDate(m_postponeTime) < RMA_TIME_BEFORE_REMINDING) {
-#if RMA_DEBUG > 1
+#if RMA_DEBUG > 0
 		std::cerr << "RMA: Insufficient time has past since postponing (" << daysSinceDate(m_postponeTime) << ")" << std::endl;
 #endif
 			return false;
