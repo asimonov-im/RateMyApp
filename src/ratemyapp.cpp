@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-#ifdef _RMA_ADVANCED_MODE_
-#include "ratemyapp_adv.h"
-#else
 #include "ratemyapp.h"
-#endif
-
 #include "ratemyapp_priv.h"
 #include <bps/bps.h>
 #include "bps/netstatus.h"
@@ -35,11 +30,13 @@
 
 #define EXTERNAL_API extern "C"
 
+static const unsigned int statVersion = 1;
+
 RateMyApp *RateMyApp::s_rmaInstance = NULL;
 dialog_instance_t RateMyApp::s_alertDialog = NULL;
 RMAError RateMyApp::s_errCode = RMA_NOT_RUNNING;
 
-// In case of problems, returns values that will prevent rating reminder from happening
+// In case of problems, returns values that will avoid rating reminder
 const bool dRated = true;
 const bool dPostponed = true;
 const int dLaunchCount = 0;
@@ -53,19 +50,15 @@ EXTERNAL_API enum RMAError rma_get_error()
 	return RateMyApp::getError();
 }
 
-EXTERNAL_API void rma_start()
-{
-	RateMyApp::createInstance();
-}
-
 EXTERNAL_API void rma_stop()
 {
 	RateMyApp::destroyInstance();
 }
 
 #ifndef _RMA_ADVANCED_MODE_
-EXTERNAL_API void rma_app_launched(bool enableReminder)
+EXTERNAL_API void rma_start(bool enableReminder)
 {
+	RateMyApp::createInstance();
 	if (RateMyApp::getError() == RMA_NO_ERROR) {
 		RateMyApp::getInstance()->appLaunched(enableReminder);
 	}
@@ -79,8 +72,9 @@ EXTERNAL_API void rma_app_significant_event(bool enableReminder)
 }
 
 #else
-EXTERNAL_API void rma_app_launched()
+EXTERNAL_API void rma_start()
 {
+	RateMyApp::createInstance();
 	if (RateMyApp::getError() == RMA_NO_ERROR) {
 		RateMyApp::getInstance()->appLaunched(false);
 	}
@@ -286,6 +280,15 @@ void RateMyApp::appSignificantEvent(bool enableReminder)
 	writeStats();
 }
 
+void RateMyApp::printStats() {
+	std::cerr << "\tm_rated = " << m_rated << std::endl;
+	std::cerr << "\tm_postponed = " << m_postponed << std::endl;
+	std::cerr << "\tm_launchTime = " << m_launchTime << std::endl;
+	std::cerr << "\tm_postponeTime = " << m_postponeTime << std::endl;
+	std::cerr << "\tm_launchCount = " << m_launchCount << std::endl;
+	std::cerr << "\tm_sigEventCount = " << m_sigEventCount << std::endl;
+}
+
 void RateMyApp::writeStats()
 {
 	if (s_errCode != RMA_NO_ERROR) {
@@ -295,22 +298,26 @@ void RateMyApp::writeStats()
 	std::ofstream ofs;
 	ofs.open(m_statPath.c_str());
 	if (ofs.is_open()) {
-		ofs << m_rated << m_postponed << m_launchTime << m_postponeTime << m_launchCount << m_sigEventCount;
+		ofs << statVersion << " ";
+		ofs << m_rated << " ";
+		ofs << m_postponed << " ";
+		ofs << m_launchTime << " ";
+		ofs << m_postponeTime << " ";
+		ofs << m_launchCount << " ";
+		ofs << m_sigEventCount;
+		ofs.close();
 
 #if RMA_DEBUG > 0
 		std::cerr << "RMA: Wrote stats to file: " << std::endl;
-		std::cerr << "\tm_rated = " << m_rated << std::endl;
-		std::cerr << "\tm_postponed = " << m_postponed << std::endl;
-		std::cerr << "\tm_launchTime = " << m_launchTime << std::endl;
-		std::cerr << "\tm_postponeTime = " << m_postponeTime << std::endl;
-		std::cerr << "\tm_launchCount = " << m_launchCount << std::endl;
-		std::cerr << "\tm_sigEventCount = " << m_sigEventCount << std::endl;
+		std::cerr << "\tversion = " << statVersion << std::endl;
+		printStats();
 #endif
+	}
 
-		ofs.close();
-	} else {
+	// Did anything bad happen while writing
+	if (ofs.eof() || ofs.bad() || ofs.fail()) {
 #if RMA_DEBUG > 0
-		std::cerr << "RMA: Unable to write stats - could not open file for writing" << std::endl;
+		std::cerr << "RMA: Unable to write stats - file could not be opened or is corrupt" << std::endl;
 #endif
 		s_errCode = RMA_FILE_ERROR;
 	}
@@ -325,22 +332,40 @@ void RateMyApp::readStats()
 	std::ifstream ifs;
 	ifs.open(m_statPath.c_str());
 	if (ifs.is_open()) {
-		ifs >> m_rated >> m_postponed >> m_launchTime >> m_postponeTime >> m_launchCount >> m_sigEventCount;
+		// Read in version first
+		unsigned int version = 0;
+		ifs >> version;
+
+		// Read in the rest of the stats accordingly
+		switch (version) {
+		case 1:
+			ifs >> m_rated;
+			ifs >> m_postponed;
+			ifs >> m_launchTime;
+			ifs >> m_postponeTime;
+			ifs >> m_launchCount;
+			ifs >> m_sigEventCount;
 
 #if RMA_DEBUG > 0
-		std::cerr << "RMA: Read stats in from file: " << std::endl;
-		std::cerr << "\tm_rated = " << m_rated << std::endl;
-		std::cerr << "\tm_postponed = " << m_postponed << std::endl;
-		std::cerr << "\tm_launchTime = " << m_launchTime << std::endl;
-		std::cerr << "\tm_postponeTime = " << m_postponeTime << std::endl;
-		std::cerr << "\tm_launchCount = " << m_launchCount << std::endl;
-		std::cerr << "\tm_sigEventCount = " << m_sigEventCount << std::endl;
+			std::cerr << "RMA: Read stats in from file: " << std::endl;
+			std::cerr << "\tversion = " << version << std::endl;
+			printStats();
 #endif
+		    break;
+		default:
+#if RMA_DEBUG > 0
+			std::cerr << "RMA: Unrecognised version of stats file (" << version << ")" << std::endl;
+#endif
+		    break;
+		}
 
 		ifs.close();
-	} else {
+	}
+
+	// Did anything bad happen while writing
+	if (!ifs.eof() || ifs.bad() || ifs.fail()) {
 #if RMA_DEBUG > 0
-		std::cerr << "RMA: Unable to read stats - could not open file for reading" << std::endl;
+		std::cerr << "RMA: Unable to read stats - file could not be opened or is corrupt" << std::endl;
 #endif
 		s_errCode = RMA_FILE_ERROR;
 	}
@@ -401,7 +426,11 @@ bool RateMyApp::networkAvailable() {
 void RateMyApp::openAppWorld(unsigned int id)
 {
 	std::stringstream ss;
-	ss << "appworld://content/" << id;
+	if (id == 0) {
+		ss << "appworld://myworld";
+	} else {
+		ss << "appworld://content/" << id;
+	}
 
 	char *err = NULL;
 	if (navigator_invoke(ss.str().c_str(), &err) != BPS_SUCCESS) {
@@ -436,7 +465,7 @@ void RateMyApp::setPostponed(bool val)
 {
 	m_postponed = val;
 	if (val) {
-		m_postponeTime = std::time(NULL);
+		m_postponeTime = dPostponedTime;
 	} else {
 		m_postponeTime = 0;
 	}
@@ -497,32 +526,48 @@ bool RateMyApp::conditionsMet()
 {
 #if RMA_DEBUG > 1
 	// Always return true
+	std::cerr << "RMA: Assuming that all reminder conditions were met for purposes of debugging" << std::endl;
 	return true;
 #endif
 
 	// Check if app has already been rated
 	if (m_rated) {
+#if RMA_DEBUG > 1
+		std::cerr << "RMA: App has already been rated" << std::endl;
+#endif
 		return false;
 	}
 
 	// Check number of launches
 	if (m_launchCount < RMA_USES_UNTIL_PROMPT) {
+#if RMA_DEBUG > 1
+		std::cerr << "RMA: Insufficient number of launches (" << m_launchCount << ")" << std::endl;
+#endif
 		return false;
 	}
 
 	// Check days since first launch
 	if (daysSinceDate(m_launchTime) < RMA_USES_UNTIL_PROMPT) {
+#if RMA_DEBUG > 1
+		std::cerr << "RMA: Insufficient times has passed (" << daysSinceDate(m_launchTime) << ")" << std::endl;
+#endif
 		return false;
 	}
 
 	// Check number of significant events
 	if (m_sigEventCount < RMA_SIG_EVENTS_UNTIL_PROMPT) {
+#if RMA_DEBUG > 1
+		std::cerr << "RMA: Insufficient number of significant events (" << m_sigEventCount << ")" << std::endl;
+#endif
 		return false;
 	}
 
 	// Check if reminder was postponed
 	if (m_postponed) {
 		if (daysSinceDate(m_postponeTime) < RMA_TIME_BEFORE_REMINDING) {
+#if RMA_DEBUG > 1
+		std::cerr << "RMA: Insufficient time has past since postponing (" << daysSinceDate(m_postponeTime) << ")" << std::endl;
+#endif
 			return false;
 		}
 	}
@@ -576,6 +621,8 @@ void RateMyApp::showAlert()
     	goto alertErr;
     }
 
+    return;
+
 alertErr:
 	dialog_destroy(s_alertDialog);
 	s_alertDialog = 0;
@@ -598,9 +645,11 @@ void RateMyApp::handleResponse(bps_event_t *event)
 			setPostponed(true);
 			setRated(false);
 		}
+		setPostponed(false);
 		break;
 	case 2: // cancel
 		setRated(true);
+		setPostponed(false);
 		break;
 	case 1: // rate later
 		setPostponed(true);

@@ -47,6 +47,7 @@ public:
 private:
 	RateMyApp();
 	void initStatsFile();
+	void printStats();
 	void writeStats();
 	void readStats();
 
