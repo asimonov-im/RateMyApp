@@ -26,72 +26,60 @@
 __BEGIN_DECLS
 
 /*
- Place your BlackBerry App World id here.
+ * The application's BlackBerry App World id
  */
-#define RMA_APPWORLD_ID "95522"
+#define RMA_APPWORLD_ID                  95522  // unsigned integer
 
 /*
- This is the message your users will see once they've passed the day+launches
- threshold.
+ * The reminder message the user will see once they've passed the day+launches threshold.
  */
 #define RMA_MESSAGE	"If you enjoy playing Frogatto, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!"
 
 /*
- The text of the button that rejects reviewing the app.
+ * The text of the button that rejects reviewing the app.
  */
 #define RMA_CANCEL_BUTTON "No, Thanks"
 
 /*
- Text of button that will send user to app review page.
+ * Text of button that will send user to app review page.
  */
 #define RMA_RATE_BUTTON	"Rate Now"
 
 /*
- Text for button to remind the user to review later.
+ * Text for button to remind the user to review later.
  */
 #define RMA_LATER_BUTTON "Rate Later"
 
 /*
- Users will need to have the same version of your app installed for this many
- days before they will be prompted to rate it.
+ * Number of days the app must be installed before the user is prompted for a review.
  */
-#define RMA_DAYS_UNTIL_PROMPT		0		// double
+#define RMA_DAYS_UNTIL_PROMPT            0  // double
 
 /*
- An example of a 'use' would be if the user launched the app. Bringing the app
- into the foreground (on devices that support it) would also be considered
- a 'use'. You tell Appirater about these events using the two methods:
- [Appirater appLaunched:]
- [Appirater appEnteredForeground:]
-
- Users need to 'use' the same version of the app this many times before
- before they will be prompted to rate it.
+ * Number of times the app must be launched before the review reminder is triggered.
+ * To indicate a successful app launch, call rma_app_launched
  */
-#define RMA_USES_UNTIL_PROMPT		0		// integer
+#define RMA_USES_UNTIL_PROMPT            0  // integer
 
 /*
- A significant event can be anything you want to be in your app. In a
- telephone app, a significant event might be placing or receiving a call.
- In a game, it might be beating a level or a boss. This is just another
- layer of filtering that can be used to make sure that only the most
- loyal of your users are being prompted to rate you on the app store.
- If you leave this at a value of -1, then this won't be a criteria
- used for rating. To tell Appirater that the user has performed
- a significant event, call the method:
- [Appirater userDidSignificantEvent:];
+ * A significant event can be anything you want to be in your app, such
+ * as beating a level or a boss. This is just another
+ * layer of filtering for review reminders.
+ * To indicate the occurrence of a significant event, call rma_app_significant_event
  */
-#define RMA_SIG_EVENTS_UNTIL_PROMPT	-1	// integer
+#define RMA_SIG_EVENTS_UNTIL_PROMPT     -1  // integer
 
 /*
- Once the rating alert is presented to the user, they might select
- 'Remind me later'. This value specifies how long (in days) Appirater
- will wait before reminding them.
+ * Number of days to wait before presenting the review reminder dialogue again
+ * after the user postpones reviewing the app.
  */
-#define RMA_TIME_BEFORE_REMINDING		1	// double
+#define RMA_TIME_BEFORE_REMINDING		 1  // double
 
 /*
- 'YES' will show the Appirater alert everytime. Useful for testing how your message
- looks and making sure the link to your app's review page works.
+ * Debug level for RateMyApp:
+ *   0 off
+ *   1 print debug information
+ *   2 print debug information and always show reminders
  */
 #define RMA_DEBUG 1
 
@@ -109,22 +97,30 @@ enum RMAError {
 RMAError rma_get_error();
 
 /**
- * Starts the RateMyApp service.
+ * Starts RateMyApp
  */
 void rma_start();
 
 /**
- * Stops the RateMyApp service.
+ * StopsRateMyApp
  */
 void rma_stop();
 
 /**
- * Indicates that the app has been launched
+ * Indicates that the app has been launched successfully
+ * If enableReminder is set to true, a review reminder alert may be displayed
+ * if all necessary conditions are satisfied.
+ * If enableReminder is set to false, only the statistics will be updated but
+ * no reminder will be presented.
  */
 void rma_app_launched(bool enableReminder);
 
 /**
  * Indicates that the user performed a significant event
+ * If enableReminder is set to true, a review reminder alert may be displayed
+ * if all necessary conditions are satisfied.
+ * If enableReminder is set to false, only the statistics will be updated but
+ * no reminder will be presented.
  */
 void rma_app_significant_event(bool enableReminder);
 

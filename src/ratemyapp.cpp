@@ -14,23 +14,39 @@
  * limitations under the License.
  */
 
+#ifdef _RMA_ADVANCED_MODE_
+#include "ratemyapp_adv.h"
+#else
 #include "ratemyapp.h"
+#endif
+
 #include "ratemyapp_priv.h"
 #include <bps/bps.h>
 #include "bps/netstatus.h"
 #include "bps/dialog.h"
 #include "bps/navigator.h"
 #include <stdlib.h>
-#include <time.h>
+#include <ctime>
+#include <cassert>
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <limits>
 
 #define EXTERNAL_API extern "C"
 
 RateMyApp *RateMyApp::s_rmaInstance = NULL;
 dialog_instance_t RateMyApp::s_alertDialog = NULL;
 RMAError RateMyApp::s_errCode = RMA_NOT_RUNNING;
+
+// In case of problems, returns values that will prevent rating reminder from happening
+const bool dRated = true;
+const bool dPostponed = true;
+const int dLaunchCount = 0;
+const int dSigEventCount = 0;
+const long long dFirstLaunchTime = std::numeric_limits<long long>::max();
+const long long dPostponedTime = std::numeric_limits<long long>::max();
+const bool dNetworkAvailable = false;
 
 EXTERNAL_API RMAError rma_get_error()
 {
@@ -50,151 +66,169 @@ EXTERNAL_API void rma_stop()
 #ifndef _RMA_ADVANCED_MODE_
 EXTERNAL_API void rma_app_launched(bool enableReminder)
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		rmaInstance->appLaunched(enableReminder);
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		RateMyApp::getInstance()->appLaunched(enableReminder);
 	}
 }
 
 EXTERNAL_API void rma_app_significant_event(bool enableReminder)
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		rmaInstance->appSignificantEvent(enableReminder);
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		RateMyApp::getInstance()->appSignificantEvent(enableReminder);
 	}
 }
 
 #else
 EXTERNAL_API void rma_app_launched()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		rmaInstance->appLaunched(false);
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		RateMyApp::getInstance()->appLaunched(false);
 	}
 }
 
 EXTERNAL_API void rma_app_significant_event()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		rmaInstance->appSignificantEvent(false);
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		RateMyApp::getInstance()->appSignificantEvent(false);
 	}
 }
 
 EXTERNAL_API bool rma_is_rated()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->isRated();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		return RateMyApp::getInstance()->isRated();
 	} else {
-		// Return a safe value
-		return true;
+		return dRated;
 	}
 }
 
 EXTERNAL_API void rma_set_rated()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->setRated();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		RateMyApp::getInstance()->setRated();
 	}
 }
 
 EXTERNAL_API bool rma_is_postponed()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->isPostponed();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		return RateMyApp::getInstance()->isPostponed();
 	} else {
-		// Return a safe value
-		return true;
+		return dPostponed;
 	}
 }
 
 EXTERNAL_API void rma_set_postponed()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->setPostponed();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		RateMyApp::getInstance()->setPostponed();
 	}
 }
 
 EXTERNAL_API int rma_launch_count()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->launchCount();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		return RateMyApp::getInstance()->launchCount();
 	} else {
-		// Return a safe value
-		return 0;
+		return dLaunchCount;
 	}
 }
 
 EXTERNAL_API int rma_sig_event_count()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->sigEventCount();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		return RateMyApp::getInstance()->sigEventCount();
 	} else {
-		// Return a safe value
-		return 0;
+		return dSigEventCount;
 	}
 }
 
-EXTERNAL_API int rma_first_launch_time()
+EXTERNAL_API long long rma_first_launch_time()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->firstLaunchTime();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		return RateMyApp::getInstance()->firstLaunchTime();
 	} else {
-		// Return a safe value
-		return MAX_INT;
+		return dFirstLaunchTime;
 	}
 }
 
-EXTERNAL_API int rma_postponed_time()
+EXTERNAL_API long long rma_postponed_time()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->postponedTime();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		return RateMyApp::getInstance()->postponedTime();
 	} else {
-		// Return a safe value
-		return MAX_INT;
+		return dPostponedTime;
 	}
 }
 
 EXTERNAL_API bool rma_network_available()
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->networkAvailable();
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		return RateMyApp::getInstance()->networkAvailable();
 	} else {
-		// Return a safe value
-		return false;
+		return dNetworkAvailable;
 	}
 }
 
-EXTERNAL_API void rma_open_app_world(const char *id)
+EXTERNAL_API void rma_open_app_world(unsigned int id)
 {
-	RateMyApp *rmaInstance = RateMyApp::getInstance();
-	if (rmaInstance) {
-		return rmaInstance->openAppWorld(id);
+	if (RateMyApp::getError() == RMA_NO_ERROR) {
+		return RateMyApp::getInstance()->openAppWorld(id);
 	}
 }
 #endif
 
+RateMyApp* RateMyApp::getInstance()
+{
+	// Calls to getInstance must ALWAYS be guarded with a check against RMA_NO_ERROR
+	// to guarantee that we NEVER return NULL.
+	assert(s_rmaInstance != NULL);
+#if RMA_DEBUG > 0
+	if (!s_rmaInstance) {
+		std::cerr << "RMA: A NULL pointer about to be returned by getInstance. Segmentation fault is imminent." << std::endl;
+	}
+#endif
+	return s_rmaInstance;
+}
 
+void RateMyApp::createInstance() {
+	if (!s_rmaInstance) {
+		// Reset error and hope for the best
+		s_errCode = RMA_NO_ERROR;
+
+		// Try creating instance
+		s_rmaInstance = new RateMyApp();
+
+		// If we failed, make sure an error is set
+		if (!s_rmaInstance) {
+			s_errCode = RMA_NOT_RUNNING;
+#if RMA_DEBUG > 0
+			std::cerr << "RMA: Failed to create an instance of RateMyApp" << std::endl;
+#endif
+		}
+	}
+}
+
+void RateMyApp::destroyInstance() {
+	// Set error to indicate that RMA is no longer running
+	if (s_rmaInstance) {
+		delete s_rmaInstance;
+		s_rmaInstance = NULL;
+		s_errCode = RMA_NOT_RUNNING;
+	}
+}
 
 RateMyApp::RateMyApp()
 	: m_rated(false)
 	, m_postponed(false)
-	, m_launchTime(time(NULL))
+	, m_launchTime(std::time(NULL))
 	, m_postponeTime(0)
 	, m_launchCount(0)
 	, m_sigEventCount(0)
 {
 	initStatsFile();
-	if(!readStats()) {
+	readStats();
+	if (s_errCode != RMA_NO_ERROR) {
 		goto end;
 	}
 	if(bps_initialize() != BPS_SUCCESS ) {
@@ -218,29 +252,6 @@ RateMyApp::RateMyApp()
 end:;
 }
 
-RateMyApp* RateMyApp::getInstance()
-{
-	return s_rmaInstance;
-}
-
-void RateMyApp::createInstance() {
-	if (!s_rmaInstance) {
-		s_rmaInstance = new RateMyApp();
-
-		if (s_rmaInstance && s_errCode == RMA_NOT_RUNNING) {
-			s_errCode = RMA_NO_ERROR;
-		}
-	}
-}
-
-void RateMyApp::destroyInstance() {
-	if (s_rmaInstance) {
-		delete s_rmaInstance;
-		s_rmaInstance = NULL;
-		s_errCode = RMA_NOT_RUNNING;
-	}
-}
-
 RateMyApp::~RateMyApp()
 {
 	if(s_errCode != RMA_BPS_FAILURE) {
@@ -251,45 +262,59 @@ RateMyApp::~RateMyApp()
 void RateMyApp::appLaunched(bool enableReminder)
 {
 	m_launchCount++;
+#ifndef _RMA_ADVANCED_MODE_
 	if (enableReminder) {
 		showReminder();
 	}
+#endif
 	writeStats();
 }
 
 void RateMyApp::appSignificantEvent(bool enableReminder)
 {
 	m_sigEventCount++;
+#ifndef _RMA_ADVANCED_MODE_
 	if (enableReminder) {
 		showReminder();
 	}
+#endif
 	writeStats();
 }
 
-bool RateMyApp::writeStats()
+void RateMyApp::writeStats()
 {
 	if (s_errCode != RMA_NO_ERROR) {
-		return false;
+		return;
 	}
 
 	std::ofstream ofs;
 	ofs.open(m_statPath.c_str());
 	if (ofs.is_open()) {
 		ofs << m_rated << m_postponed << m_launchTime << m_postponeTime << m_launchCount << m_sigEventCount;
+
+#if RMA_DEBUG > 0
+		std::cerr << "RMA: Wrote stats to file: " << std::endl;
+		std::cerr << "\tm_rated = " << m_rated << std::endl;
+		std::cerr << "\tm_postponed = " << m_postponed << std::endl;
+		std::cerr << "\tm_launchTime = " << m_launchTime << std::endl;
+		std::cerr << "\tm_postponeTime = " << m_postponeTime << std::endl;
+		std::cerr << "\tm_launchCount = " << m_launchCount << std::endl;
+		std::cerr << "\tm_sigEventCount = " << m_sigEventCount << std::endl;
+#endif
+
 		ofs.close();
-		return true;
 	} else {
 #if RMA_DEBUG > 0
 		std::cerr << "RMA: Unable to write stats - could not open file for writing" << std::endl;
 #endif
-		return false;
+		s_errCode = RMA_FILE_ERROR;
 	}
 }
 
-bool RateMyApp::readStats()
+void RateMyApp::readStats()
 {
 	if (s_errCode != RMA_NO_ERROR) {
-		return false;
+		return;
 	}
 
 	std::ifstream ifs;
@@ -308,13 +333,11 @@ bool RateMyApp::readStats()
 #endif
 
 		ifs.close();
-		return true;
 	} else {
 #if RMA_DEBUG > 0
 		std::cerr << "RMA: Unable to read stats - could not open file for reading" << std::endl;
 #endif
 		s_errCode = RMA_FILE_ERROR;
-		return false;
 	}
 }
 
@@ -324,6 +347,7 @@ void RateMyApp::initStatsFile()
 	char* homeDir = getenv("HOME");
 	std::stringstream ss;
 
+	// Find the full path to the stats file
 	if(!homeDir) {
 #if RMA_DEBUG > 0
 		std::cerr << "RMA: Failed to find HOME environment variable" << std::endl;
@@ -338,165 +362,47 @@ void RateMyApp::initStatsFile()
 	std::cerr << "RMA: Setting statPath to " << m_statPath << std::endl;
 #endif
 
+	// Check if the file exists by opening it for reading
 	std::ifstream ifs;
 	ifs.open(m_statPath.c_str(), std::ifstream::in);
 	ifs.close();
 
+	// If the file does not exist, create and initialize it
 	if (ifs.fail()) {
 #if RMA_DEBUG > 0
 	std::cerr << "RMA: Stat file does not exist. Trying to create it." << std::endl;
 #endif
 		ifs.clear(std::ios::failbit);
-		if(!writeStats()) {
-			s_errCode = RMA_FILE_ERROR;
-		}
-	}
-}
-
-void RateMyApp::showReminder()
-{
-	if (s_errCode != RMA_NO_ERROR) {
-		return;
-	}
-
-	if (conditionsMet() && showAlert()) {
-		while (true) {
-			bps_event_t *event = NULL;
-			bps_get_event(&event, -1);
-
-			if (event && bps_event_get_domain(event) == dialog_get_domain()) {
-				handleResponse(event);
-				writeStats();
-				break;
-			}
-		}
+		writeStats();
 	}
 }
 
 bool RateMyApp::networkAvailable() {
-	if (s_errCode != RMA_BPS_FAILURE) {
+	if (s_errCode == RMA_BPS_FAILURE) {
 		return false;
 	}
 
 	bool netAvailable;
 	if (BPS_SUCCESS != netstatus_get_availability(&netAvailable)) {
 		netAvailable = false;
+#if RMA_DEBUG > 0
+	std::cerr << "RMA: Could not get network status" << std::endl;
+#endif
 		s_errCode = RMA_BPS_FAILURE;
 	}
 	return netAvailable;
 }
 
-bool RateMyApp::conditionsMet()
+void RateMyApp::openAppWorld(unsigned int id)
 {
-#if RMA_DEBUG > 1
-	return true;
-#endif
-
-	// Check if app has already been rated
-	if (m_rated) {
-		return false;
-	}
-
-	// Check number of launches
-	if (m_launchCount < RMA_USES_UNTIL_PROMPT) {
-		return false;
-	}
-
-	// Check days since first launch
-	double days = (time(NULL) - m_launchTime) / 86500.0;
-	if (days < RMA_USES_UNTIL_PROMPT) {
-		return false;
-	}
-
-	// Check number of significant events
-	if (m_sigEventCount < RMA_SIG_EVENTS_UNTIL_PROMPT) {
-		return false;
-	}
-
-	// Check if reminder was postponed
-	if (m_postponed) {
-		days = (time(NULL) - m_postponeTime) / 86500.0;
-		if (days < RMA_TIME_BEFORE_REMINDING) {
-			return false;
-		}
-	}
-
-	// Check network status
-	return networkAvailable();
-
-}
-
-bool RateMyApp::showAlert()
-{
-    if (dialog_create_alert(&s_alertDialog) != BPS_SUCCESS) {
-#if RMA_DEBUG > 0
-    	std::cerr << "RMA: Failed to create alert dialog." << std::endl;
-#endif
-        return false;
-    }
-
-    if (dialog_set_alert_message_text(s_alertDialog, RMA_MESSAGE) != BPS_SUCCESS) {
-#if RMA_DEBUG > 0
-    	std::cerr << "RMA: Failed to set alert dialog message text." << std::endl;
-#endif
-    	goto err;
-    }
-
-    if (dialog_add_button(s_alertDialog, RMA_RATE_BUTTON, true, 0, true) != BPS_SUCCESS) {
-#if RMA_DEBUG > 0
-    	std::cerr << "RMA: Failed to add Rate button to alert dialog." << std::endl;
-#endif
-    	goto err;
-    }
-
-    if (dialog_add_button(s_alertDialog, RMA_LATER_BUTTON, true, 0, true) != BPS_SUCCESS) {
-#if RMA_DEBUG > 0
-    	std::cerr << "RMA: Failed to add Rate Later button to alert dialog." << std::endl;
-#endif
-    	goto err;
-    }
-
-    if (dialog_add_button(s_alertDialog, RMA_CANCEL_BUTTON, true, 0, true) != BPS_SUCCESS) {
-#if RMA_DEBUG > 0
-    	std::cerr << "RMA: Failed to add Cancel button to alert dialog." << std::endl;
-#endif
-    	goto err;
-    }
-
-    if (dialog_show(s_alertDialog) != BPS_SUCCESS) {
-#if RMA_DEBUG > 0
-    	std::cerr << "RMA: Failed to show alert dialog." << std::endl;
-#endif
-    	goto err;
-    }
-
-    return true;
-
-err:
-	dialog_destroy(s_alertDialog);
-	s_alertDialog = 0;
-	return false;
-}
-
-void RateMyApp::openAppWorld(const char *id)
-{
-	if (s_errCode != RMA_NO_ERROR) {
-		return;
-	}
-
 	std::stringstream ss;
-	ss << "appworld://";
-	if (id) {
-		ss << "content/" << id;
-	} else {
-		ss << "myworld";
-	}
+	ss << "appworld://content/" << id;
 
 	char *err = NULL;
 	if (navigator_invoke(ss.str().c_str(), &err) != BPS_SUCCESS) {
 		if (err) {
 #if RMA_DEBUG > 0
-			std::cerr << "RMA: " << err << std::endl;
+			std::cerr << "RMA: Invoke error - " << err << std::endl;
 #endif
 			bps_free(err);
 		}
@@ -513,7 +419,124 @@ void RateMyApp::setRated()
 void RateMyApp::setPostponed()
 {
 	m_postponed = true;
-	m_postponeTime = time(NULL);
+	m_postponeTime = std::time(NULL);
+}
+
+
+#ifndef _RMA_ADVANCED_MODE_
+double daysSinceDate(long long date) {
+	return (std::time(NULL) - date) / 86500.0;
+}
+
+void RateMyApp::showReminder()
+{
+	if (s_errCode != RMA_NO_ERROR) {
+		return;
+	}
+
+	if (conditionsMet()) {
+		showAlert();
+
+		while (s_errCode == RMA_NO_ERROR) {
+			bps_event_t *event = NULL;
+			bps_get_event(&event, -1);
+
+			if (event && bps_event_get_domain(event) == dialog_get_domain()) {
+				handleResponse(event);
+				writeStats();
+				break;
+			}
+		}
+	}
+}
+
+bool RateMyApp::conditionsMet()
+{
+#if RMA_DEBUG > 1
+	// Always return true
+	return true;
+#endif
+
+	// Check if app has already been rated
+	if (m_rated) {
+		return false;
+	}
+
+	// Check number of launches
+	if (m_launchCount < RMA_USES_UNTIL_PROMPT) {
+		return false;
+	}
+
+	// Check days since first launch
+	if (daysSinceDate(m_launchTime) < RMA_USES_UNTIL_PROMPT) {
+		return false;
+	}
+
+	// Check number of significant events
+	if (m_sigEventCount < RMA_SIG_EVENTS_UNTIL_PROMPT) {
+		return false;
+	}
+
+	// Check if reminder was postponed
+	if (m_postponed) {
+		if (daysSinceDate(m_postponeTime) < RMA_TIME_BEFORE_REMINDING) {
+			return false;
+		}
+	}
+
+	// Check network status
+	return networkAvailable();
+}
+
+void RateMyApp::showAlert()
+{
+    if (dialog_create_alert(&s_alertDialog) != BPS_SUCCESS) {
+#if RMA_DEBUG > 0
+    	std::cerr << "RMA: Failed to create alert dialog." << std::endl;
+#endif
+        s_errCode = RMA_BPS_FAILURE;
+        return;
+    }
+
+    if (dialog_set_alert_message_text(s_alertDialog, RMA_MESSAGE) != BPS_SUCCESS) {
+#if RMA_DEBUG > 0
+    	std::cerr << "RMA: Failed to set alert dialog message text." << std::endl;
+#endif
+    	goto alertErr;
+    }
+
+    if (dialog_add_button(s_alertDialog, RMA_RATE_BUTTON, true, 0, true) != BPS_SUCCESS) {
+#if RMA_DEBUG > 0
+    	std::cerr << "RMA: Failed to add Rate button to alert dialog." << std::endl;
+#endif
+    	goto alertErr;
+    }
+
+    if (dialog_add_button(s_alertDialog, RMA_LATER_BUTTON, true, 0, true) != BPS_SUCCESS) {
+#if RMA_DEBUG > 0
+    	std::cerr << "RMA: Failed to add Rate Later button to alert dialog." << std::endl;
+#endif
+    	goto alertErr;
+    }
+
+    if (dialog_add_button(s_alertDialog, RMA_CANCEL_BUTTON, true, 0, true) != BPS_SUCCESS) {
+#if RMA_DEBUG > 0
+    	std::cerr << "RMA: Failed to add Cancel button to alert dialog." << std::endl;
+#endif
+    	goto alertErr;
+    }
+
+    if (dialog_show(s_alertDialog) != BPS_SUCCESS) {
+#if RMA_DEBUG > 0
+    	std::cerr << "RMA: Failed to show alert dialog." << std::endl;
+#endif
+    	goto alertErr;
+    }
+
+alertErr:
+	dialog_destroy(s_alertDialog);
+	s_alertDialog = 0;
+	s_errCode = RMA_BPS_FAILURE;
 }
 
 void RateMyApp::handleResponse(bps_event_t *event)
@@ -534,7 +557,7 @@ void RateMyApp::handleResponse(bps_event_t *event)
 	    break;
 	default:
 #if RMA_DEBUG > 0
-    	std::cerr << "RMA: Unknown selection in dialog." << std::endl;
+    	std::cerr << "RMA: Unknown selection in dialog response handler" << std::endl;
 #endif
 	    break;
 	}
@@ -542,3 +565,4 @@ void RateMyApp::handleResponse(bps_event_t *event)
 	dialog_destroy(s_alertDialog);
 	s_alertDialog = 0;
 }
+#endif

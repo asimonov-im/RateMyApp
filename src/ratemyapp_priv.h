@@ -42,28 +42,29 @@ public:
 	int firstLaunchTime();
 	int postponedTime();
 	bool networkAvailable();
-	void openAppWorld(const char *id);
-
+	void openAppWorld(unsigned int id);
 
 private:
 	RateMyApp();
 	void initStatsFile();
-	bool writeStats();
-	bool readStats();
+	void writeStats();
+	void readStats();
+
+#ifndef _RMA_ADVANCED_MODE_
 	void showReminder();
 	bool conditionsMet();
-	bool showAlert();
+	void showAlert();
 	void handleResponse(bps_event_t *event);
+#endif
 
 	static RateMyApp* s_rmaInstance;
 	static RMAError s_errCode;
 	static dialog_instance_t s_alertDialog;
-
 	std::string m_statPath;
 	bool m_rated;
 	bool m_postponed;
-	int m_launchTime;
-	int m_postponeTime;
+	long long m_launchTime;
+	long long m_postponeTime;
 	int m_launchCount;
 	int m_sigEventCount;
 };

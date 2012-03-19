@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef _RATEMYAPP_H_
-#define _RATEMYAPP_H_
+#ifndef _RATEMYAPP_ADV_H_
+#define _RATEMYAPP_ADV_H_
 
-#ifndef __RMA_ADVANCED_MODE_
+#ifndef _RMA_ADVANCED_MODE_
 #error "To use the advanced version of RateMyApp, include ratemyapp_adv.h and define _RMA_ADVANCED_MODE_. To use the basic version, include ratemyapp.h and undefine _RMA_ADVANCED_MODE_."
 #endif
 
@@ -26,113 +26,97 @@
 __BEGIN_DECLS
 
 /*
- Place your BlackBerry App World id here.
- */
-#define RMA_APPWORLD_ID "95522"
-
-/*
- This is the message your users will see once they've passed the day+launches
- threshold.
- */
-#define RMA_MESSAGE	"If you enjoy playing Frogatto, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!"
-
-/*
- The text of the button that rejects reviewing the app.
- */
-#define RMA_CANCEL_BUTTON "No, Thanks"
-
-/*
- Text of button that will send user to app review page.
- */
-#define RMA_RATE_BUTTON	"Rate now"
-
-/*
- Text for button to remind the user to review later.
- */
-#define RMA_RATE_LATER "Rate later"
-
-/*
- Users will need to have the same version of your app installed for this many
- days before they will be prompted to rate it.
- */
-#define RMA_DAYS_UNTIL_PROMPT		0		// double
-
-/*
- An example of a 'use' would be if the user launched the app. Bringing the app
- into the foreground (on devices that support it) would also be considered
- a 'use'. You tell Appirater about these events using the two methods:
- [Appirater appLaunched:]
- [Appirater appEnteredForeground:]
-
- Users need to 'use' the same version of the app this many times before
- before they will be prompted to rate it.
- */
-#define RMA_USES_UNTIL_PROMPT		0		// integer
-
-/*
- A significant event can be anything you want to be in your app. In a
- telephone app, a significant event might be placing or receiving a call.
- In a game, it might be beating a level or a boss. This is just another
- layer of filtering that can be used to make sure that only the most
- loyal of your users are being prompted to rate you on the app store.
- If you leave this at a value of -1, then this won't be a criteria
- used for rating. To tell Appirater that the user has performed
- a significant event, call the method:
- [Appirater userDidSignificantEvent:];
- */
-#define RMA_SIG_EVENTS_UNTIL_PROMPT	-1	// integer
-
-/*
- Once the rating alert is presented to the user, they might select
- 'Remind me later'. This value specifies how long (in days) Appirater
- will wait before reminding them.
- */
-#define RMA_TIME_BEFORE_REMINDING		1	// double
-
-/*
- 'YES' will show the Appirater alert everytime. Useful for testing how your message
- looks and making sure the link to your app's review page works.
+ * Debug level for RateMyApp:
+ *   0 off
+ *   1 print debug information
+ *   2 print debug information and always show reminders
  */
 #define RMA_DEBUG 1
 
 enum RMAError {
 	RMA_NO_ERROR = 0,
-	RMA_BPS_FAILURE = 1,
-	RMA_FILE_ERROR = 2
+	RMA_NOT_RUNNING = 1,
+	RMA_BPS_FAILURE = 2,
+	RMA_FILE_ERROR = 3,
+	RMA_MEMORY_ERROR = 4
 };
 
 /**
- * Start the RateMyApp service.
+ * Returns the current error state
+ */
+RMAError rma_get_error();
+
+/**
+ * Start RateMyApp
  */
 void rma_start();
 
 /**
- * Stop the RateMyApp service.
+ * Stop RateMyApp
  */
 void rma_stop();
 
 /**
- * Indicate that the app has been launched
+ * Updates the statistic for the number of times the app has been launched
  */
-#ifdef _RMA_ADVANCED_MODE_
 void rma_app_launched();
-#else
-void rma_app_launched(bool enableReminder);
-#endif
 
 /**
- * Indicate that the user performed a significant event
+ * Updates the statistic for the number of times the user performed a significant event
  */
-#ifdef _RMA_ADVANCED_MODE_
 void rma_app_significant_event();
-#else
-void rma_app_significant_event(bool enableReminder);
-#endif
 
-#ifdef _RMA_ADVANCED_MODE_
-RMAError rma_get_error();
-#endif
+/**
+ * Returns true if the app has been reviewed by the user
+ */
+bool rma_is_rated();
+
+/**
+ * Records that the app has reviewed
+ */
+void rma_set_rated();
+
+/**
+ * Returns true if the user has postponed the review process
+ */
+bool rma_is_postponed();
+
+/**
+ * Records that the user wanted to postpone the review
+ */
+void rma_set_postponed();
+
+/**
+ * Returns total number of times the app has been launched
+ */
+int rma_launch_count();
+
+/**
+ * Returns total count of significant user events
+ */
+int rma_sig_event_count();
+
+/**
+ * Returns the time of app's first launch in Unix epoch format
+ */
+long long rma_first_launch_time();
+
+/**
+ * Returns the time of postponing the review process in Unix epoch format
+ */
+long long rma_postponed_time();
+
+/**
+ * Returns true if a network connection is available for accessing App World
+ */
+bool rma_network_available();
+
+/**
+ * Opens App World page for the specified app id
+ */
+void rma_open_app_world(unsigned int id);
+
 
 __END_DECLS
 
-#endif /* _RATEMYAPP_H_ */
+#endif /* _RATEMYAPP_ADV_H_ */
