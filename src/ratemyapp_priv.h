@@ -25,7 +25,7 @@ class RateMyApp
 {
 public:
 	static RateMyApp *getInstance();
-	static void createInstance();
+	static void createInstance(bool enableReminder);
 	static void destroyInstance();
 	static RMAError getError();
 
