@@ -67,7 +67,7 @@ EXTERNAL_API void appraise_start(bool enableReminder)
 	AppRaiseMe::createInstance(enableReminder, &defConditions);
 }
 
-EXTERNAL_API void appraise_app_significant_event(bool enableReminder)
+EXTERNAL_API void appraise_significant_event(bool enableReminder)
 {
 	if (AppRaiseMe::getError() == APPRAISE_NO_ERROR) {
 		AppRaiseMe::getInstance()->appSignificantEvent(enableReminder);
@@ -96,7 +96,7 @@ EXTERNAL_API bool appraise_check_conditions()
 	}
 }
 
-EXTERNAL_API void appraise_app_significant_event()
+EXTERNAL_API void appraise_significant_event()
 {
 	if (AppRaiseMe::getError() == APPRAISE_NO_ERROR) {
 		AppRaiseMe::getInstance()->appSignificantEvent(false);
@@ -144,7 +144,7 @@ EXTERNAL_API int appraise_launch_count()
 	}
 }
 
-EXTERNAL_API int appraise_sig_event_count()
+EXTERNAL_API int appraise_significant_event_count()
 {
 	if (AppRaiseMe::getError() == APPRAISE_NO_ERROR) {
 		return AppRaiseMe::getInstance()->sigEventCount();

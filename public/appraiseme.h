@@ -22,40 +22,46 @@
 __BEGIN_DECLS
 
 /*
+ * By default, only the basic API for AppRaiseMe is exposed.
+ * To enable the advanced version of the library, uncomment the define below.
+ */
+#define _APPRAISE_ADVANCED_MODE_
+
+/*
  * The application's BlackBerry App World id
  */
-#define APPRAISE_APPWORLD_ID                95522  // unsigned integer
+#define APPRAISE_APPWORLD_ID  95522  // unsigned integer
 
 /*
  * The reminder message the user will see once they've passed the day+launches threshold.
  */
-#define APPRAISE_MESSAGE	"If you enjoy playing APPNAME, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!"
+#define APPRAISE_MESSAGE  "If you enjoy playing APPNAME, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!"
 
 /*
  * The text of the button that rejects reviewing the app.
  */
-#define APPRAISE_CANCEL_BUTTON "No, Thanks"
+#define APPRAISE_CANCEL_BUTTON  "No, Thanks"
 
 /*
  * Text of button that will send user to app review page.
  */
-#define APPRAISE_RATE_BUTTON	"Rate Now"
+#define APPRAISE_RATE_BUTTON  "Rate Now"
 
 /*
  * Text for button to remind the user to review later.
  */
-#define APPRAISE_LATER_BUTTON "Rate Later"
+#define APPRAISE_LATER_BUTTON  "Rate Later"
 
 /*
  * Number of days the app must be installed before the user is prompted for a review.
  */
-#define APPRAISE_DAYS_UNTIL_PROMPT            0.0  // double
+#define APPRAISE_DAYS_UNTIL_PROMPT  0.0006  // double
 
 /*
  * Number of times the app must be launched before the review reminder is triggered.
  * To indicate a successful app launch, call appraise_app_launched
  */
-#define APPRAISE_USES_UNTIL_PROMPT            3  // integer
+#define APPRAISE_USES_UNTIL_PROMPT  3  // integer
 
 /*
  * A significant event can be anything you want to be in your app, such
@@ -63,13 +69,13 @@ __BEGIN_DECLS
  * layer of filtering for review reminders.
  * To indicate the occurrence of a significant event, call appraise_app_significant_event
  */
-#define APPRAISE_SIG_EVENTS_UNTIL_PROMPT     -1  // integer
+#define APPRAISE_SIG_EVENTS_UNTIL_PROMPT  1  // integer
 
 /*
  * Number of days to wait before presenting the review reminder dialogue again
  * after the user postpones reviewing the app.
  */
-#define APPRAISE_TIME_BEFORE_REMINDING		 0.0  // double
+#define APPRAISE_TIME_BEFORE_REMINDING  0.0003  // double
 
 /*
  * Debug level for AppRaiseMe:
@@ -77,7 +83,7 @@ __BEGIN_DECLS
  *   1 print debug information
  *   2 print debug information and always show reminders
  */
-#define APPRAISE_DEBUG 1
+#define APPRAISE_DEBUG  1
 
 struct RemindConditions {
 	double daysInUse;
@@ -121,7 +127,7 @@ void appraise_start(bool enableReminder);
  * If enableReminder is set to false, only the statistics will be updated but
  * no reminder will be presented.
  */
-void appraise_app_significant_event(bool enableReminder);
+void appraise_significant_event(bool enableReminder);
 
 #else
 /**
@@ -130,10 +136,15 @@ void appraise_app_significant_event(bool enableReminder);
 void appraise_start();
 
 /**
+ * Indicates that the user performed a significant event
+ */
+void appraise_significant_event();
+
+/**
  * Sets the conditions for when a review reminder can be displayed.
  * The conditions are lost when AppRaiseMe is shut down.
  */
-void appraise_set_conditions(RemindConditions conditions);
+void appraise_set_conditions(struct RemindConditions conditions);
 
 /**
  * Returns true if all conditions for a review reminder have been met.
@@ -168,7 +179,7 @@ int appraise_launch_count();
 /**
  * Returns total count of significant user events
  */
-int appraise_sig_event_count();
+int appraise_significant_event_count();
 
 /**
  * Returns the time of app's first launch in Unix epoch format

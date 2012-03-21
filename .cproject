@@ -18,7 +18,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.sharedLib.debug.923854395." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.debug.1539997021" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1526606474" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
-							<option id="com.qnx.qcc.option.runtime.1899238995" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
+							<option id="com.qnx.qcc.option.runtime.1899238995" name="Runtime:" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.905332692" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/AppRaiseMe/Device-Debug}" id="com.qnx.nto.1258145305" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1158823024" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
@@ -78,7 +78,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.sharedLib.release.267642154." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.release.1561461915" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1347394567" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
-							<option id="com.qnx.qcc.option.runtime.1115321377" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
+							<option id="com.qnx.qcc.option.runtime.1115321377" name="Runtime:" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.2094052968" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/AppRaiseMe/Device-Release}" id="com.qnx.nto.750237790" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1291075109" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
@@ -135,7 +135,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.sharedLib.profile.1430506309." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.profile.1877213304" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1600640953" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
-							<option id="com.qnx.qcc.option.runtime.205852380" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
+							<option id="com.qnx.qcc.option.runtime.205852380" name="Runtime:" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.704992716" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/AppRaiseMe/Device-Profile}" id="com.qnx.nto.1002633116" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1551708490" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
@@ -197,7 +197,7 @@
 					<folderInfo id="com.qnx.qcc.configuration.sharedLib.coverage.351619288." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.coverage.1826115065" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1689288534" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
-							<option id="com.qnx.qcc.option.runtime.264170924" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
+							<option id="com.qnx.qcc.option.runtime.264170924" name="Runtime:" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.389773002" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/AppRaiseMe/Device-Coverage}" id="com.qnx.nto.740018997" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.586319640" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
@@ -258,7 +258,7 @@
 				<configuration artifactExtension="so" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib" description="" id="com.qnx.qcc.configuration.sharedLib.debug.11021306" name="Simulator-Debug" parent="com.qnx.qcc.configuration.sharedLib.debug">
 					<folderInfo id="com.qnx.qcc.configuration.sharedLib.debug.11021306." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.debug.1197390269" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
-							<option id="com.qnx.qcc.option.runtime.793223001" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
+							<option id="com.qnx.qcc.option.runtime.793223001" name="Runtime:" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.2114209421" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/AppRaiseMe/Simulator-Debug}" id="com.qnx.nto.1949652436" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1469168426" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
@@ -317,7 +317,7 @@
 				<configuration artifactExtension="so" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildType=com.qnx.buildType.profile,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib" description="Build for Profiling" id="com.qnx.qcc.configuration.sharedLib.profile.1319230051" name="Simulator-Profile" parent="com.qnx.qcc.configuration.sharedLib.profile">
 					<folderInfo id="com.qnx.qcc.configuration.sharedLib.profile.1319230051." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.profile.996358443" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
-							<option id="com.qnx.qcc.option.runtime.1117525321" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
+							<option id="com.qnx.qcc.option.runtime.1117525321" name="Runtime:" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1845680963" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/AppRaiseMe/Simulator-Profile}" id="com.qnx.nto.681815345" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.849617216" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
@@ -378,7 +378,7 @@
 				<configuration artifactExtension="so" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildType=com.qnx.buildType.coverage,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib" description="Build with Code Coverage" id="com.qnx.qcc.configuration.sharedLib.coverage.21961427" name="Simulator-Coverage" parent="com.qnx.qcc.configuration.sharedLib.coverage">
 					<folderInfo id="com.qnx.qcc.configuration.sharedLib.coverage.21961427." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.coverage.1346829507" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
-							<option id="com.qnx.qcc.option.runtime.464449182" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
+							<option id="com.qnx.qcc.option.runtime.464449182" name="Runtime:" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1793633149" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/AppRaiseMe/Simulator-Coverage}" id="com.qnx.nto.1186048252" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1091623625" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">

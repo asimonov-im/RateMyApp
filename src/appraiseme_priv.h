@@ -44,6 +44,7 @@ public:
 	long long postponedTime();
 	bool networkAvailable();
 	void openAppWorld(unsigned int id);
+	bool conditionsMet();
 
 private:
 	AppRaiseMe();
@@ -51,7 +52,6 @@ private:
 	void printStats();
 	void writeStats();
 	void readStats();
-	bool conditionsMet();
 
 #ifndef _RMA_ADVANCED_MODE_
 	bool showReminder();
