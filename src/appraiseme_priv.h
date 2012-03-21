@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-#ifndef RATEMYAPP_PRIV_H_
-#define RATEMYAPP_PRIV_H_
+#ifndef APPRAISEME_PRIV_H_
+#define APPRAISEME_PRIV_H_
 
 #include <string>
 #include <bps/bps.h>
 #include "bps/dialog.h"
 
-class RateMyApp
+class AppRaiseMe
 {
 public:
-	static RateMyApp *getInstance();
-	static void createInstance(bool enableReminder);
+	static AppRaiseMe *getInstance();
+	static void createInstance(bool enableReminder, RemindConditions *conditions);
 	static void destroyInstance();
-	static RMAError getError();
+	static AppRaiseErr getError();
 
-	~RateMyApp();
+	~AppRaiseMe();
 	void appLaunched(bool enableReminder);
 	void appSignificantEvent(bool enableReminder);
 
+	void setConditions(RemindConditions *conditions);
 	bool isRated();
 	void setRated(bool val);
 	bool isPostponed();
@@ -45,23 +46,26 @@ public:
 	void openAppWorld(unsigned int id);
 
 private:
-	RateMyApp();
+	AppRaiseMe();
 	void initStatsFile();
 	void printStats();
 	void writeStats();
 	void readStats();
+	bool conditionsMet();
 
 #ifndef _RMA_ADVANCED_MODE_
-	void showReminder();
-	bool conditionsMet();
+	bool showReminder();
 	void showAlert();
 	void handleResponse(bps_event_t *event);
 #endif
 
-	static RateMyApp* s_rmaInstance;
-	static RMAError s_errCode;
+	static AppRaiseMe* s_appraiseInstance;
+	static AppRaiseErr s_errCode;
 	static dialog_instance_t s_alertDialog;
+	bool m_bpsInitialized;
+	bool m_conditionsSet;
 	std::string m_statPath;
+	RemindConditions m_conditions;
 	bool m_rated;
 	bool m_postponed;
 	long long m_launchTime;
@@ -70,4 +74,4 @@ private:
 	int m_sigEventCount;
 };
 
-#endif /* RATEMYAPP_PRIV_H_ */
+#endif /* APPRAISEME_PRIV_H_ */

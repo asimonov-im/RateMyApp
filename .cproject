@@ -20,7 +20,7 @@
 							<option id="com.qnx.qcc.option.cpu.1526606474" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<option id="com.qnx.qcc.option.runtime.1899238995" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.905332692" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/RateMyApp/Device-Debug}" id="com.qnx.nto.1258145305" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
+							<builder buildPath="${workspace_loc:/AppRaiseMe/Device-Debug}" id="com.qnx.nto.1258145305" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1158823024" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.shared.227318352" name="Shared (-shared)" superClass="com.qnx.qcc.option.compiler.shared" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.optlevel.2039454755" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
@@ -80,7 +80,7 @@
 							<option id="com.qnx.qcc.option.cpu.1347394567" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<option id="com.qnx.qcc.option.runtime.1115321377" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.2094052968" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/RateMyApp/Device-Release}" id="com.qnx.nto.750237790" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
+							<builder buildPath="${workspace_loc:/AppRaiseMe/Device-Release}" id="com.qnx.nto.750237790" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1291075109" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.shared.1594648087" name="Shared (-shared)" superClass="com.qnx.qcc.option.compiler.shared" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.optlevel.1949397332" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.2" valueType="enumerated"/>
@@ -137,7 +137,7 @@
 							<option id="com.qnx.qcc.option.cpu.1600640953" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<option id="com.qnx.qcc.option.runtime.205852380" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.704992716" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/RateMyApp/Device-Profile}" id="com.qnx.nto.1002633116" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
+							<builder buildPath="${workspace_loc:/AppRaiseMe/Device-Profile}" id="com.qnx.nto.1002633116" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1551708490" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.shared.1396556722" name="Shared (-shared)" superClass="com.qnx.qcc.option.compiler.shared" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.optlevel.564283443" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
@@ -199,7 +199,7 @@
 							<option id="com.qnx.qcc.option.cpu.1689288534" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
 							<option id="com.qnx.qcc.option.runtime.264170924" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.389773002" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/RateMyApp/Device-Coverage}" id="com.qnx.nto.740018997" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
+							<builder buildPath="${workspace_loc:/AppRaiseMe/Device-Coverage}" id="com.qnx.nto.740018997" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.586319640" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.shared.160012508" name="Shared (-shared)" superClass="com.qnx.qcc.option.compiler.shared" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.optlevel.867355722" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
@@ -260,7 +260,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.debug.1197390269" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.runtime.793223001" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.2114209421" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/RateMyApp/Simulator-Debug}" id="com.qnx.nto.1949652436" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
+							<builder buildPath="${workspace_loc:/AppRaiseMe/Simulator-Debug}" id="com.qnx.nto.1949652436" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1469168426" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.shared.1889703250" name="Shared (-shared)" superClass="com.qnx.qcc.option.compiler.shared" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.optlevel.185246809" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
@@ -319,7 +319,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.profile.996358443" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.runtime.1117525321" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1845680963" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/RateMyApp/Simulator-Profile}" id="com.qnx.nto.681815345" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
+							<builder buildPath="${workspace_loc:/AppRaiseMe/Simulator-Profile}" id="com.qnx.nto.681815345" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.849617216" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.shared.69436506" name="Shared (-shared)" superClass="com.qnx.qcc.option.compiler.shared" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.optlevel.317574210" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
@@ -380,7 +380,7 @@
 						<toolChain id="com.qnx.qcc.toolChain.sharedLib.coverage.1346829507" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.runtime.464449182" superClass="com.qnx.qcc.option.runtime" value="com.qnx.qcc.option.gen.runtime.c++._gpp" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1793633149" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/RateMyApp/Simulator-Coverage}" id="com.qnx.nto.1186048252" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
+							<builder buildPath="${workspace_loc:/AppRaiseMe/Simulator-Coverage}" id="com.qnx.nto.1186048252" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="com.qnx.nto"/>
 							<tool id="com.qnx.qcc.tool.compiler.1091623625" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.shared.949678108" name="Shared (-shared)" superClass="com.qnx.qcc.option.compiler.shared" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.optlevel.1853018164" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
@@ -427,7 +427,7 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="RateMyApp.null.499491926" name="RateMyApp"/>
+		<project id="AppRaiseMe.null.499491926" name="AppRaiseMe"/>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.qnx.tools.ide.qde.managedbuilder.core.qccScannerInfo"/>
